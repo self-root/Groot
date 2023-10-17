@@ -1,0 +1,31 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>LoginScreen.qml</file>
+        <file>App.qml</file>
+        <file>ConnectionScreen.qml</file>
+        <file>UserAccountScreen.qml</file>
+        <file>SplashScreen.qml</file>
+        <file>VerificationScreen.qml</file>
+        <file>SettingScreen.qml</file>
+    </qresource>
+    <qresource prefix="/components">
+        <file alias="SimpleButton.qml">components/SimpleButton.qml</file>
+        <file alias="LineEdit.qml">components/LineEdit.qml</file>
+        <file alias="PasswordEdit.qml">components/PasswordEdit.qml</file>
+        <file alias="MyStyle.qml">components/MyStyle.qml</file>
+        <file alias="IconButton.qml">components/IconButton.qml</file>
+        <file alias="SettingButton.qml">components/SettingButton.qml</file>
+        <file alias="TrafficIndicator.qml">components/TrafficIndicator.qml</file>
+    </qresource>
+    <qresource prefix="/assets">
+        <file alias="giphy2.gif">assets/giphy2.gif</file>
+        <file alias="connected.png">assets/connected.png</file>
+        <file alias="disconnected.png">assets/disconnected.png</file>
+        <file alias="anvpn.png">assets/anvpn.png</file>
+        <file alias="irootsoftware.png">assets/irootsoftware.png</file>
+        <file alias="power.svg">assets/power.svg</file>
+        <file alias="power-off.svg">assets/power-off.svg</file>
+        <file alias="webfont.ttf">assets/webfont.ttf</file>
+    </qresource>
+</RCC>
