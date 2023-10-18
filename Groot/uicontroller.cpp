@@ -16,5 +16,5 @@ UIController::UIController(AnVPN::VPNManager &vpnManager_, QObject *parent)
 
 QString UIController::appName()
 {
-    return "AnnoyingVPN";
+    return "Groot v1.0";
 }

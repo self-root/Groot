@@ -26,6 +26,10 @@ signals:
     void toSettings();
     void toUserAccount();
     void back();
+    void toSplitTunneling();
+    void toUserAccountScreen();
+    void toDeviceScreen();
+    void toAboutScreen();
 };
 
 #endif // UICONTROLLER_H

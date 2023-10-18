@@ -55,6 +55,9 @@ Item {
             iconText: "\uf054"
             iconFont: webFont.name
             iconColor: "white"
+            onClicked: {
+                uicontroller.toUserAccountScreen()
+            }
         }
 
         SettingButton{
@@ -64,6 +67,9 @@ Item {
             iconText: "\uf054"
             iconFont: webFont.name
             iconColor: "white"
+            onClicked: {
+                uicontroller.toSplitTunneling()
+            }
         }
 
         SettingButton{
@@ -73,6 +79,10 @@ Item {
             iconText: "\uf054"
             iconFont: webFont.name
             iconColor: "white"
+
+            onClicked: {
+                uicontroller.toDeviceScreen()
+            }
         }
 
         SettingButton{
@@ -91,6 +101,9 @@ Item {
             iconText: "\uf054"
             iconFont: webFont.name
             iconColor: "white"
+            onClicked: {
+                uicontroller.toAboutScreen()
+            }
         }
 
 

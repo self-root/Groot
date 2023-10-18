@@ -15,7 +15,6 @@ void Traffic::onTraficTimer()
 {
     double down = vpnCore.getDownTraffic();
     double up = vpnCore.getUpTraffic();
-    qDebug() << "Up: " << up << " Down: " << down;
     downTraffic = (down - previousDown);
     //setDownTraffic(tmpDown);
     upTraffic = (up - previousUp);

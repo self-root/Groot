@@ -22,6 +22,7 @@ VPNCore::VPNCore(QObject *parent)
 void VPNCore::setConfig(const VPNConfig &conf)
 {
     this->mConfig = conf.toStringJson();
+    qDebug() << __FUNCTION__ << mConfig;
 }
 
 void VPNCore::connect()

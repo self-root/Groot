@@ -3,6 +3,7 @@ package xyz.irootsoftware.device;
 import android.os.Build;
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import org.json.JSONArray;
@@ -24,7 +25,7 @@ public class Device {
     }
 
     public static  String getInstalledApps(Context context) throws JSONException {
-        List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
+        List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(PackageManager.GET_META_DATA);
         JSONArray apps = new JSONArray();
 
         for (int i = 0; i < packages.size(); i++)

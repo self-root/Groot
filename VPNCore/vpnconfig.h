@@ -4,6 +4,7 @@
 #include "VPNCore_global.h"
 #include <QObject>
 #include <QJsonObject>
+#include <QJsonArray>
 
 namespace AnVPN {
 class VPNCORE_EXPORT VPNConfig : public QObject
@@ -18,9 +19,13 @@ public:
      */
     QString toStringJson() const;
 
+    void addExcluded(const QStringList excluded);
+
+    static QStringList getExcludedApp();
+
 private:
     QJsonObject config;
-
+    QStringList excludedApp;
 signals:
 
 };

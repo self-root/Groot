@@ -78,6 +78,7 @@ void APICaller::getDevices(const User &user)
     request.setRawHeader("Authorization", auth);
 
     QNetworkReply *reply = networkmanager.get(request);
+    qDebug() << "Fetching user devices...";
     QObject::connect(reply, &QNetworkReply::finished, this, &APICaller::getDevicesReply);
 }
 
@@ -269,6 +270,7 @@ void APICaller::getDevicesReply()
             QByteArray data = reply->readAll();
             QJsonDocument jDoc = QJsonDocument::fromJson(data);
             QJsonArray devices = jDoc.array();
+            qDebug() << "Devices: " << devices;
             emit deviceListReady(devices);
             break;
         }

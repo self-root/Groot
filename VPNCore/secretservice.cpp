@@ -87,6 +87,9 @@ void SecretService::remove()
 {
     if (mAlias.isEmpty())
         return;
+    QFile tokenFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/token.tk");
+    tokenFile.remove();
+    emit removed();
 
 }
 

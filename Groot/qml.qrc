@@ -8,6 +8,9 @@
         <file>SplashScreen.qml</file>
         <file>VerificationScreen.qml</file>
         <file>SettingScreen.qml</file>
+        <file>SplitTunnelSetting.qml</file>
+        <file>DevicesScreen.qml</file>
+        <file>About.qml</file>
     </qresource>
     <qresource prefix="/components">
         <file alias="SimpleButton.qml">components/SimpleButton.qml</file>
@@ -22,7 +25,7 @@
         <file alias="giphy2.gif">assets/giphy2.gif</file>
         <file alias="connected.png">assets/connected.png</file>
         <file alias="disconnected.png">assets/disconnected.png</file>
-        <file alias="anvpn.png">assets/anvpn.png</file>
+        <file alias="groot.png">assets/anvpn4.png</file>
         <file alias="irootsoftware.png">assets/irootsoftware.png</file>
         <file alias="power.svg">assets/power.svg</file>
         <file alias="power-off.svg">assets/power-off.svg</file>

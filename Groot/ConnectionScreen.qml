@@ -29,7 +29,7 @@ Item {
 
         NumberAnimation {
             target: innerRing
-            property: "heigth"
+            property: "height"
             duration: 600
             easing.type: Easing.InOutQuad
             to: 140

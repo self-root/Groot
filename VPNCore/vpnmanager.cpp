@@ -1,12 +1,13 @@
 #include "vpnmanager.h"
 #include <QJsonObject>
 #include <QDebug>
-#include "vpnconfig.h"
 #include <QCoreApplication>
 
 namespace AnVPN {
 VPNManager::VPNManager(QObject *parent)
-    : QObject{parent}, traffic(new Traffic(vpnCore))
+    : QObject{parent}, traffic(new Traffic(vpnCore)),
+      packageModel(new PackageListModel()),
+      mDeviceListModel(new DeviceListModel())
 {
     QCoreApplication::setApplicationName("Groot");
     QCoreApplication::setOrganizationName("irootsoftware");
@@ -19,8 +20,12 @@ VPNManager::VPNManager(QObject *parent)
     QObject::connect(&apiCaller, &APICaller::signupSuccess, this, &VPNManager::verifyUser);
     QObject::connect(&apiCaller, &APICaller::emailVerified, this, &VPNManager::needToLogin);
     QObject::connect(&apiCaller, &APICaller::userConfDownloaded, this, &VPNManager::onUserConfDownloaded);
+    QObject::connect(&apiCaller, &APICaller::deviceListReady, mDeviceListModel, &DeviceListModel::setDevices);
+    QObject::connect(&apiCaller, &APICaller::deviceRemoved, this, &VPNManager::onDeviceRemoved);
     QObject::connect(&vpnCore, &VPNCore::tunnelConnected, this, &VPNManager::onTunnelConnected);
     QObject::connect(&vpnCore, &VPNCore::tunnelDisconnected, this, &VPNManager::onTunnelDisconnected);
+    QObject::connect(packageModel, &PackageListModel::excludedListUpdated, this, &VPNManager::onExcludedListUpdated);
+    QObject::connect(&secretSevice, &SecretService::removed, this, &VPNManager::needToLogin);
     secretSevice.setAlias("anvpnlogin");
 }
 
@@ -57,10 +62,35 @@ void VPNManager::connect()
     else
     {
         qDebug() << "Connecting";
+        auto excuded = VPNConfig::getExcludedApp();
+        config.addExcluded(excuded);
         auto deviceId = deviceManager.toJson();
         apiCaller.getConf(deviceId, *this->user);
     }
+}
 
+void VPNManager::getUserDevices()
+{
+    apiCaller.getDevices(*user);
+}
+
+void VPNManager::removeDevice(const QString &deviceId)
+{
+    apiCaller.removeDevice(*user, deviceId);
+}
+
+void VPNManager::logout()
+{
+    QString deviceId = deviceManager.getDeviceId();
+    if (mTunnelState == 1)
+    {
+        qDebug() << "Disconnecting";
+        vpnCore.disconnect();
+    }
+    removeDevice(deviceId);
+    QSettings set;
+    set.remove("deviceID");
+    secretSevice.remove();
 
 }
 
@@ -93,6 +123,16 @@ Traffic *VPNManager::getTraffic()
     return traffic;
 }
 
+PackageListModel *VPNManager::packageListModel()
+{
+    return packageModel;
+}
+
+DeviceListModel *VPNManager::devicelistModel()
+{
+    return mDeviceListModel;
+}
+
 int VPNManager::tunnelState() const
 {
     return mTunnelState;
@@ -106,6 +146,12 @@ void VPNManager::setTunnelState(int newTunnelState)
          mTunnelState = newTunnelState;
         emit tunnelStateChanged();
     }
+}
+
+void VPNManager::onDeviceRemoved(const QString &deviceId)
+{
+    qDebug() << "Device deleted: " << deviceId;
+    getUserDevices();
 }
 
 void VPNManager::onBasicLoginSuccessfull(const QJsonObject &data)
@@ -126,9 +172,8 @@ void VPNManager::onLoginSuccess(const QJsonObject &data)
 
 void VPNManager::onUserConfDownloaded(const QJsonObject &conf)
 {
-    VPNConfig vConf;
-    vConf.setConf(conf);
-    vpnCore.setConfig(vConf);
+    config.setConf(conf);
+    vpnCore.setConfig(config);
     vpnCore.connect();
 }
 
@@ -140,6 +185,18 @@ void VPNManager::onTunnelConnected()
 void VPNManager::onTunnelDisconnected()
 {
     setTunnelState(0);
+}
+
+void VPNManager::onExcludedListUpdated(const QStringList &excluded)
+{
+    qDebug() << "Adding excluded: " << excluded;
+    config.addExcluded(excluded);
+    if (mTunnelState == 1)
+    {
+        vpnCore.disconnect();
+        vpnCore.setConfig(config);
+        vpnCore.connect();
+    }
 }
 
 }

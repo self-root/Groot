@@ -96,10 +96,10 @@ public class WireguardCientConfig {
                 .addAllowedIps(this.allowedIPs)
                 .setEndpoint(InetEndpoint.parse(this.endpoint));
         cfg.addPeer(peerBuilder.build());
-        ArrayList<String> excluded = new ArrayList<String>();
+        /*excluded = new ArrayList<String>();
         excluded.add("com.tencent.mm");
         excluded.add("com.eg.android.AlipayGphone");
-        excluded.add("com.taobao.taobao");
+        excluded.add("com.taobao.taobao");*/
 
         interfaceBuilder.addAddresses(this.address)
                 .addDnsServers(this.dnsServers)
@@ -144,6 +144,16 @@ public class WireguardCientConfig {
 
         this.setDnsServers(dnss);
         this.setPrivateKey(root.getString("PrivateKey"));
+
+        excluded = new ArrayList<>();
+
+        if (root.has("excluded")){
+            JSONArray exArray = root.getJSONArray("excluded");
+
+            for (int i = 0; i < exArray.length(); i++){
+                excluded.add(exArray.getString(i));
+            }
+        }
     }
 
 

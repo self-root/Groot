@@ -8,7 +8,7 @@
 
 namespace AnVPN {
 PackageListModel::PackageListModel(QObject *parent)
-    : QAbstractItemModel(parent)
+    : QAbstractListModel(parent)
 {
 }
 
@@ -22,8 +22,8 @@ int PackageListModel::rowCount(const QModelIndex &parent) const
 
 QVariant PackageListModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
+    //if (!index.isValid())
+    //    return QVariant();
 
     int row = index.row();
     Package pkg = mPackages.at(row);
@@ -63,7 +63,7 @@ void PackageListModel::getAppLists()
         QNativeInterface::QAndroidApplication::context());
 
     QJsonArray jArr = QJsonDocument::fromJson(packages.toString().toStdString().c_str()).array();
-    getExpluded();
+    getExcluded();
     beginResetModel();
     mPackages.clear();
     for (int i = 0; i < jArr.size(); i++)
@@ -84,7 +84,39 @@ void PackageListModel::getAppLists()
 
 }
 
-void PackageListModel::getExpluded()
+int PackageListModel::search(const QString &appName)
+{
+    for (std::size_t i = 0; i < mPackages.size(); i++)
+    {
+        if (mPackages.at(i).name.contains(appName, Qt::CaseInsensitive))
+            return i;
+    }
+    return -1;
+}
+
+void PackageListModel::setExcluded(const QString &packageName, bool excluded_)
+{
+    for (auto &p : mPackages)
+    {
+        if (p.package == packageName)
+        {
+            p.excluded = excluded_;
+            if (excluded_ == false)
+            {
+                excluded.removeIf([&](const QString &pkg){
+                    return pkg == packageName;
+                });
+            }
+            else {
+                excluded.append(packageName);
+            }
+            return;
+        }
+    }
+
+}
+
+void PackageListModel::getExcluded()
 {
     QSettings settings;
     int arrSize = settings.beginReadArray("excluded");
@@ -93,22 +125,31 @@ void PackageListModel::getExpluded()
     {
         settings.setArrayIndex(i);
         excluded.append(settings.value("package").toString());
+        qDebug() << "Excluded: " << settings.value("package").toString();
     }
     settings.endArray();
+
+
 }
 
-void PackageListModel::saveExpluded()
+void PackageListModel::saveExcluded()
 {
     QSettings settings;
+    settings.remove("excluded");
+    settings.sync();
     settings.beginWriteArray("excluded", excluded.size());
 
     for (int i = 0; i < excluded.size(); i++)
     {
         settings.setArrayIndex(i);
         settings.setValue("package", excluded.at(i));
+        qDebug() << "Setting value: " << excluded.at(i);
     }
 
     settings.endArray();
+    settings.sync();
+
+    emit excludedListUpdated(this->excluded);
 }
 
 }

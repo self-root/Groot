@@ -20,6 +20,24 @@ Page {
             viewStack.pop()
         }
 
+        function onToSplitTunneling(){
+            vpnmanager.packageListModel.getAppLists()
+            viewStack.push("qrc:/SplitTunnelSetting.qml")
+        }
+
+        function onToUserAccountScreen(){
+            viewStack.push("qrc:/UserAccountScreen.qml")
+        }
+
+        function onToDeviceScreen(){
+            vpnmanager.getUserDevices()
+            viewStack.push("qrc:/DevicesScreen.qml")
+        }
+
+        function onToAboutScreen(){
+            viewStack.push("qrc:/About.qml")
+        }
+
     }
 
     StackView{

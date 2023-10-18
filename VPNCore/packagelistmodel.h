@@ -1,7 +1,7 @@
 #ifndef PACKAGELISTMODEL_H
 #define PACKAGELISTMODEL_H
 
-#include <QAbstractItemModel>
+#include <QAbstractListModel>
 #include "VPNCore_global.h"
 
 namespace AnVPN {
@@ -13,7 +13,7 @@ struct Package
     bool excluded;
 };
 
-class VPNCORE_EXPORT PackageListModel : public QAbstractItemModel
+class VPNCORE_EXPORT PackageListModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -31,13 +31,19 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    void getAppLists();
-    void getExpluded();
-    void saveExpluded();
+    Q_INVOKABLE void getAppLists();
+    Q_INVOKABLE int search(const QString &appName);
+    Q_INVOKABLE void setExcluded(const QString &packageName, bool excluded_);
+    Q_INVOKABLE void saveExcluded();
+
+    void getExcluded();
 
 private:
     QStringList excluded;
     std::vector<Package> mPackages;
+
+signals:
+    void excludedListUpdated(const QStringList &excludedList);
 };
 
 }

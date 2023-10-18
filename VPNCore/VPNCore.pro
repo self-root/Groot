@@ -12,6 +12,7 @@ CONFIG += c++17
 
 SOURCES += \
     apicaller.cpp \
+    devicelistmodel.cpp \
     devicemanager.cpp \
     packagelistmodel.cpp \
     secretservice.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     Utils.h \
     VPNCore_global.h \
     apicaller.h \
+    devicelistmodel.h \
     devicemanager.h \
     packagelistmodel.h \
     secretservice.h \
