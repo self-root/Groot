@@ -48,6 +48,7 @@ signals:
     void badRequest();
     void unverifiedUser();
     void invalidToken();
+    void loginFailure(const QString &message);
     void invalidCredentials();
     void serverError();
     void signupSuccess();

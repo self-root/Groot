@@ -24,7 +24,6 @@ SOURCES += \
     vpnmanager.cpp
 
 HEADERS += \
-    Utils.h \
     VPNCore_global.h \
     apicaller.h \
     devicelistmodel.h \

@@ -15,7 +15,7 @@ VPNManager::VPNManager(QObject *parent)
     QObject::connect(&apiCaller, &APICaller::basicLoginSuccessfull, this, &VPNManager::onBasicLoginSuccessfull);
     QObject::connect(&apiCaller, &APICaller::loginSuccessfull, this, &VPNManager::onLoginSuccess);
     QObject::connect(&apiCaller, &APICaller::invalidToken, this, &VPNManager::needToLogin);
-    QObject::connect(&apiCaller, &APICaller::invalidCredentials, this, &VPNManager::loginFailure);
+    QObject::connect(&apiCaller, &APICaller::loginFailure, this, &VPNManager::loginFailure);
     QObject::connect(&apiCaller, &APICaller::unverifiedUser, this, &VPNManager::verifyUser);
     QObject::connect(&apiCaller, &APICaller::signupSuccess, this, &VPNManager::verifyUser);
     QObject::connect(&apiCaller, &APICaller::emailVerified, this, &VPNManager::needToLogin);

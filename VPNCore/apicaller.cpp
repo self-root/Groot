@@ -117,17 +117,18 @@ void APICaller::basicloginReply()
         }
 
         else if (statsCode == 401) {
-            emit invalidCredentials();
+            emit loginFailure("email or password are incorrect");
         }
 
         else if (statsCode == 403) {
+            emit loginFailure("email address not verified, check your mailbox");
             emit unverifiedUser();
         }
 
         else
         {
             qDebug() << __FUNCTION__ << " Unknown error: " << statsCode;
-            emit serverError();
+            emit loginFailure("An error has occured while trying to login, contact admin \nError code: " + QString::number(statsCode));
         }
     }
 }

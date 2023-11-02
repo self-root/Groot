@@ -9,6 +9,26 @@ Page {
     Material.accent: "#4361ee"
     anchors.fill: parent
 
+    Connections{
+        target: vpnmanager
+
+        function onLoginFailure(message){
+            loginDialog.text = message
+            loginDialog.open()
+        }
+    }
+
+    Dialog{
+        property alias text: dialogText.text
+        id: loginDialog
+        anchors.centerIn: parent
+        title: "Login failure"
+        Text {
+            id: dialogText
+            anchors.centerIn: parent
+        }
+    }
+
     ParallelAnimation{
         id: toSingUpAnimation
         running: false

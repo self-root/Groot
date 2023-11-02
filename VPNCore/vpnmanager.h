@@ -45,7 +45,7 @@ public slots:
     void onDeviceRemoved(const QString &deviceId);
 signals:
     void loginSuccess();
-    void loginFailure();
+    void loginFailure(const QString &message);
     void verifyUser();
     void userLoggedOut();
     void vpnConnected();
