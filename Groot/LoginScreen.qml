@@ -13,7 +13,14 @@ Page {
         target: vpnmanager
 
         function onLoginFailure(message){
+            loginDialog.title = "Login failure";
             loginDialog.text = message
+            loginDialog.open()
+        }
+
+        function onUserConflict(){
+            loginDialog.title = "Conflict"
+            loginDialog.text = "User already exists"
             loginDialog.open()
         }
     }
@@ -22,7 +29,6 @@ Page {
         property alias text: dialogText.text
         id: loginDialog
         anchors.centerIn: parent
-        title: "Login failure"
         Text {
             id: dialogText
             anchors.centerIn: parent

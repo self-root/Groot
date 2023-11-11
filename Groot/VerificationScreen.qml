@@ -7,6 +7,24 @@ Page {
     Material.theme: Material.Dark
     Material.accent: "#4361ee"
     anchors.fill: parent
+
+    Connections{
+        target: vpncore
+        function onVerificationCodeNotMatch(){
+            dialog.title = "Code Mismatch"
+            dialog.text = "Code  entered does not match"
+            dialog.open()
+        }
+    }
+    Dialog{
+        property alias text: dialogText.text
+        id: dialog
+        anchors.centerIn: parent
+        Text {
+            id: dialogText
+            anchors.centerIn: parent
+        }
+    }
     Column{
         anchors.centerIn: parent
         spacing: 6

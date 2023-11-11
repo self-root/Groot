@@ -50,7 +50,7 @@ signals:
     void invalidToken();
     void loginFailure(const QString &message);
     void invalidCredentials();
-    void serverError();
+    void serverError(const QString &error, int errorCode);
     void signupSuccess();
     void userConflict();
     void emailVerified();

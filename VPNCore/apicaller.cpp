@@ -164,7 +164,7 @@ void APICaller::loginReply()
         else
         {
             qDebug() << __FUNCTION__ << " Unknown error: " << statsCode;
-            emit serverError();
+            emit serverError("Unknown Error while loging using user token", statsCode);
         }
     }
 }
@@ -193,6 +193,7 @@ void APICaller::signupReply()
             break;
         default:
             qDebug() << __FUNCTION__ << "ERROR: " << statusCode;
+            emit serverError("Unknown error while trying to sign you up", statusCode);
             break;
         }
     }
@@ -286,7 +287,6 @@ void APICaller::getDevicesReply()
             break;
         }
     }
-
 }
 
 void APICaller::removeDeviceReply()

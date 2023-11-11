@@ -54,6 +54,8 @@ signals:
     void needToLogin();
     void signedUp();
     void tunnelStateChanged();
+    void userConflict();
+    void verificationCodeNotMatch();
 
 private:
     APICaller apiCaller;
