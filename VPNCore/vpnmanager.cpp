@@ -19,7 +19,7 @@ VPNManager::VPNManager(QObject *parent)
     QObject::connect(&apiCaller, &APICaller::unverifiedUser, this, &VPNManager::verifyUser);
     QObject::connect(&apiCaller, &APICaller::signupSuccess, this, &VPNManager::verifyUser);
     QObject::connect(&apiCaller, &APICaller::emailVerified, this, &VPNManager::needToLogin);
-    QObject::connect(&apiCaller, &APICaller::codeExpired, this, &VPNManager::verificationCodeNotMatch);
+    QObject::connect(&apiCaller, &APICaller::codeNotMatch, this, &VPNManager::verificationCodeNotMatch);
     QObject::connect(&apiCaller, &APICaller::userConfDownloaded, this, &VPNManager::onUserConfDownloaded);
     QObject::connect(&apiCaller, &APICaller::deviceListReady, mDeviceListModel, &DeviceListModel::setDevices);
     QObject::connect(&apiCaller, &APICaller::deviceRemoved, this, &VPNManager::onDeviceRemoved);

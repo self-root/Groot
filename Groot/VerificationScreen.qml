@@ -9,7 +9,7 @@ Page {
     anchors.fill: parent
 
     Connections{
-        target: vpncore
+        target: vpnmanager
         function onVerificationCodeNotMatch(){
             dialog.title = "Code Mismatch"
             dialog.text = "Code  entered does not match"
