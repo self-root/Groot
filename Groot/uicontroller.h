@@ -30,6 +30,7 @@ signals:
     void toUserAccountScreen();
     void toDeviceScreen();
     void toAboutScreen();
+    void toDNSSetting();
 };
 
 #endif // UICONTROLLER_H

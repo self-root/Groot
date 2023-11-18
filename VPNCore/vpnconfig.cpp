@@ -19,6 +19,14 @@ QString VPNConfig::toStringJson() const
 {
 
     QJsonObject jobj = config;
+    if (!mDns.first.isEmpty() && !mDns.second.isEmpty())
+    {
+        QJsonArray arr;
+        arr.append(mDns.first);
+        arr.append(mDns.second);
+        jobj["DNS"] = arr;
+    }
+
     jobj["excluded"] = QJsonArray::fromStringList(excludedApp);
     qDebug () << "Add excluded to config: " << excludedApp;
     qDebug() << "Excluded app: " << jobj["excluded"] ;
@@ -48,6 +56,12 @@ QStringList VPNConfig::getExcludedApp()
     }
     settings.endArray();
     return excluded;
+}
+
+void VPNConfig::setDNS(const QPair<QString, QString> &dns)
+{
+    mDns.first = dns.first;
+    mDns.second = dns.second;
 }
 
 }

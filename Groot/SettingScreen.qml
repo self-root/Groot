@@ -86,12 +86,15 @@ Item {
         }
 
         SettingButton{
-            text: "Log"
+            text: "DNS Server"
             color: "white"
             pixelSize: 18
             iconText: "\uf054"
             iconFont: webFont.name
             iconColor: "white"
+            onClicked: {
+                uicontroller.toDNSSetting();
+            }
         }
 
         SettingButton{

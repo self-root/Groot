@@ -14,6 +14,7 @@ SOURCES += \
     apicaller.cpp \
     devicelistmodel.cpp \
     devicemanager.cpp \
+    dnslistmodel.cpp \
     packagelistmodel.cpp \
     secretservice.cpp \
     traffic.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     apicaller.h \
     devicelistmodel.h \
     devicemanager.h \
+    dnslistmodel.h \
     packagelistmodel.h \
     secretservice.h \
     traffic.h \

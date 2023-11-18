@@ -7,7 +7,8 @@ namespace AnVPN {
 VPNManager::VPNManager(QObject *parent)
     : QObject{parent}, traffic(new Traffic(vpnCore)),
       packageModel(new PackageListModel()),
-      mDeviceListModel(new DeviceListModel())
+      mDeviceListModel(new DeviceListModel()),
+      mDnsListModel(new DNSListModel())
 {
     QCoreApplication::setApplicationName("Groot");
     QCoreApplication::setOrganizationName("irootsoftware");
@@ -96,6 +97,22 @@ void VPNManager::logout()
 
 }
 
+void VPNManager::changeDns(const QString &dnsName)
+{
+    qDebug() << __FUNCTION__ << dnsName;
+    if (mDnsListModel->setCurrentDNS(dnsName))
+    {
+        config.setDNS(mDnsListModel->getDns(dnsName));
+        vpnCore.setConfig(config);
+        if (mTunnelState == 1)
+        {
+            vpnCore.reconnect();
+        }
+    }
+
+
+}
+
 void VPNManager::getToken()
 {
     QObject::connect(&secretSevice, &SecretService::restored, this, [this](const QString &tooken){
@@ -135,6 +152,11 @@ DeviceListModel *VPNManager::devicelistModel()
     return mDeviceListModel;
 }
 
+DNSListModel *VPNManager::dnsListModel()
+{
+    return mDnsListModel;
+}
+
 int VPNManager::tunnelState() const
 {
     return mTunnelState;
@@ -145,7 +167,7 @@ void VPNManager::setTunnelState(int newTunnelState)
 
     if (newTunnelState != mTunnelState)
     {
-         mTunnelState = newTunnelState;
+        mTunnelState = newTunnelState;
         emit tunnelStateChanged();
     }
 }

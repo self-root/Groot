@@ -47,7 +47,7 @@ void VPNCore::reconnect()
     if (!mConfig.isEmpty())
     {
         this->disconnect();
-        wgConnection.callMethod<void>("startConnection");
+        this->connect();
     }
 }
 

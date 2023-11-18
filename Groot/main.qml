@@ -33,6 +33,7 @@ ApplicationWindow {
     }
 
     onClosing: {
+        uicontroller.back()
         close.accepted = false
     }
 }
