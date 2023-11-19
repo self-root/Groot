@@ -57,14 +57,48 @@ Item {
         anchors.rightMargin: 4
         model: vpnmanager.dnsListModel
 
-        delegate: RadioDelegate{
-            width: parent.width
-            text: dnsname
-            ButtonGroup.group: dnsBtnGroup
-            checked: currentdns
+        delegate: ItemDelegate{
+            id: itemDelegate
+            width: dnslistView.width
+            height: 70
+            contentItem: Rectangle{
+                color: "transparent"
+                Text {
+                    id: dnsNameTxt
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+
+                    anchors.topMargin: 3
+                    anchors.leftMargin: 3
+                    text: dnsname
+                    color: "white"
+                    font.pixelSize: 16
+                }
+
+                Text {
+                    id: dnsAddrTxt
+                    anchors.left: parent.left
+                    anchors.top: dnsNameTxt.bottom
+                    anchors.topMargin: 6
+                    anchors.leftMargin: 3
+                    text: primarydns + ", " + secondarydns
+                    color: Qt.darker("white")
+                    font.pixelSize: 16
+                }
+
+                RadioButton{
+                    id: radioBtn
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: 4
+                    ButtonGroup.group: dnsBtnGroup
+                    checked: currentdns
+                }
+            }
 
             onClicked: {
                 console.log("Clicked: " + dnsname)
+                radioBtn.checked = true
                 vpnmanager.changeDns(dnsname)
             }
         }
