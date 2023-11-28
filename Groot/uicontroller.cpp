@@ -11,6 +11,10 @@ UIController::UIController(AnVPN::VPNManager &vpnManager_, QObject *parent)
     QObject::connect(&vpnManager, &AnVPN::VPNManager::loginFailure, this, &UIController::loginFailed);
     QObject::connect(&vpnManager, &AnVPN::VPNManager::signedUp, this, &UIController::toVerificationView);
     QObject::connect(&vpnManager, &AnVPN::VPNManager::verifyUser, this, &UIController::toVerificationView);
+    QObject::connect(&vpnManager, &AnVPN::VPNManager::pwdResetMailSent, this, &UIController::toPwdReset);
+    QObject::connect(&vpnManager, &AnVPN::VPNManager::pwdResetMailFail, this, &UIController::pwdMailRequestFail);
+    QObject::connect(&vpnManager, &AnVPN::VPNManager::passwordReset, this, &UIController::toLoginView);
+    QObject::connect(&vpnManager, &AnVPN::VPNManager::passwordResetFail, this, &UIController::pwdResetFail);
     vpnManager.getToken();
 }
 

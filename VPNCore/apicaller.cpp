@@ -93,6 +93,29 @@ void APICaller::removeDevice(const User &user, const QString &deviceId)
     QObject::connect(reply, &QNetworkReply::finished, this, &APICaller::removeDeviceReply);
 }
 
+void APICaller::requestResetPwdMail(const QString &email)
+{
+    QNetworkRequest request;
+    request.setUrl(QString("https://%1:%2/%3/%4").arg(
+        host,
+        port,
+        "/vpn/user/resetpwdrequest",
+        email));
+    QNetworkReply *reply = networkmanager.get(request);
+    QObject::connect(reply, &QNetworkReply::finished, this, &APICaller::onRequestResetEmail);
+}
+
+void APICaller::resetPassword(const QJsonObject &obj)
+{
+    QNetworkRequest request;
+    request.setUrl(QString("https://%1:%2/%3").arg(
+        host,
+        port,
+        "/vpn/user/resetpassword"));
+    QNetworkReply *reply = networkmanager.post(request, QJsonDocument(obj).toJson(QJsonDocument::Compact));
+    QObject::connect(reply, &QNetworkReply::finished, this, &APICaller::passwordResetReply);
+}
+
 void APICaller::basicloginReply()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
@@ -321,6 +344,50 @@ void APICaller::removeDeviceReply()
             break;
         default:
             qDebug() << __FUNCTION__ << "ERROR: " << statusCode;
+            break;
+        }
+    }
+}
+
+void APICaller::onRequestResetEmail()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    auto attr = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+
+    if (attr.isValid())
+    {
+        int statusCode = attr.toInt();
+        switch (statusCode) {
+        case 200:
+            emit resetPasswordMailSent();
+            break;
+        case 404:
+            emit requestPasswordMailFail();
+            break;
+        default:
+            qDebug() << __FUNCTION__ << " Error: " << statusCode;
+            break;
+        }
+    }
+}
+
+void APICaller::passwordResetReply()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    auto attr = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+
+    if (attr.isValid())
+    {
+        int statusCode = attr.toInt();
+        switch (statusCode) {
+        case 200:
+            emit passwordReset();
+            break;
+        case 404:
+            emit passwordResetFail();
+            break;
+        default:
+            qDebug() << __FUNCTION__ << " Error: " << statusCode;
             break;
         }
     }

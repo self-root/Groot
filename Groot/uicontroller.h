@@ -31,6 +31,10 @@ signals:
     void toDeviceScreen();
     void toAboutScreen();
     void toDNSSetting();
+    void toPwdMailRequest();
+    void pwdMailRequestFail();
+    void toPwdReset();
+    void pwdResetFail();
 };
 
 #endif // UICONTROLLER_H

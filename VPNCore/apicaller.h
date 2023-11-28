@@ -23,6 +23,8 @@ public:
     void getConf(const QJsonObject &obj, const User &user);
     void getDevices(const User &user);
     void removeDevice(const User &user, const QString &deviceId);
+    void requestResetPwdMail(const QString &email);
+    void resetPassword(const QJsonObject &obj);
 
 private:
 #ifdef QT_DEBUG
@@ -41,6 +43,8 @@ private slots:
     void userConfReply();
     void getDevicesReply();
     void removeDeviceReply();
+    void onRequestResetEmail();
+    void passwordResetReply();
 
 signals:
     void loginSuccessfull(const QJsonObject &data);
@@ -61,6 +65,10 @@ signals:
     void deviceListReady(const QJsonArray &devices);
     void deviceRemoved(const QString &deviceId);
     void noDevice(const QString &deviceId);
+    void resetPasswordMailSent();
+    void requestPasswordMailFail();
+    void passwordReset();
+    void passwordResetFail();
 };
 
 }

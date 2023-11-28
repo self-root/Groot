@@ -35,6 +35,8 @@ public:
     Q_INVOKABLE void removeDevice(const QString &deviceId);
     Q_INVOKABLE void logout();
     Q_INVOKABLE void changeDns(const QString &dnsName);
+    Q_INVOKABLE void requestPwdResetMail(const QString &email);
+    Q_INVOKABLE void resetPassword(const QString &newPassword, const QString &verifcode);
     void getToken();
     void saveToken();
     User *getUser();
@@ -60,6 +62,10 @@ signals:
     void tunnelStateChanged();
     void userConflict();
     void verificationCodeNotMatch();
+    void pwdResetMailSent();
+    void pwdResetMailFail();
+    void passwordReset();
+    void passwordResetFail();
 
 private:
     APICaller apiCaller;

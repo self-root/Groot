@@ -25,6 +25,10 @@ VPNManager::VPNManager(QObject *parent)
     QObject::connect(&apiCaller, &APICaller::deviceListReady, mDeviceListModel, &DeviceListModel::setDevices);
     QObject::connect(&apiCaller, &APICaller::deviceRemoved, this, &VPNManager::onDeviceRemoved);
     QObject::connect(&apiCaller, &APICaller::userConflict, this, &VPNManager::userConflict);
+    QObject::connect(&apiCaller, &APICaller::resetPasswordMailSent, this, &VPNManager::pwdResetMailSent);
+    QObject::connect(&apiCaller, &APICaller::requestPasswordMailFail, this, &VPNManager::pwdResetMailFail);
+    QObject::connect(&apiCaller, &APICaller::passwordReset, this, &VPNManager::passwordReset);
+    QObject::connect(&apiCaller, &APICaller::passwordResetFail, this, &VPNManager::passwordResetFail);
     QObject::connect(&vpnCore, &VPNCore::tunnelConnected, this, &VPNManager::onTunnelConnected);
     QObject::connect(&vpnCore, &VPNCore::tunnelDisconnected, this, &VPNManager::onTunnelDisconnected);
     QObject::connect(packageModel, &PackageListModel::excludedListUpdated, this, &VPNManager::onExcludedListUpdated);
@@ -111,6 +115,23 @@ void VPNManager::changeDns(const QString &dnsName)
     }
 
 
+}
+
+void VPNManager::requestPwdResetMail(const QString &email)
+{
+    this->user->setEmail(email);
+    apiCaller.requestResetPwdMail(email);
+}
+
+void VPNManager::resetPassword(const QString &newPassword, const QString &verifcode)
+{
+    if (user->getEmail().isEmpty() || newPassword.isEmpty() || verifcode.isEmpty())
+        return;
+    QJsonObject form;
+    form["mail"] = user->getEmail();
+    form["verifcode"] = verifcode;
+    form["pwd"] = newPassword;
+    apiCaller.resetPassword(form);
 }
 
 void VPNManager::getToken()
