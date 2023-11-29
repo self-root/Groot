@@ -9,8 +9,9 @@ Item {
     property alias placeholder: field.placeholderText
     property alias text: field.text
     implicitHeight: c.implicitHeight
-    MyStyle{
-        id: style
+    FontLoader{
+        id: webfont
+        source: "qrc:/assets/webfont.ttf"
     }
 
     Column{
@@ -37,7 +38,7 @@ Item {
                     id: eye
                     text: field.echoMode == TextInput.Password? "\uf070" : "\uf06e"
                     //font.family: Style.ifont
-                    font.family: style.ifont
+                    font.family: webfont.name
                     clip: true
 
                 }
@@ -53,9 +54,6 @@ Item {
                     }
                 }
             }
-
-
         }
-
     }
 }

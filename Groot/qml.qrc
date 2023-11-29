@@ -12,6 +12,7 @@
         <file>DevicesScreen.qml</file>
         <file>About.qml</file>
         <file>DNSSettingScreen.qml</file>
+        <file>ResetPasswordScreen.qml</file>
     </qresource>
     <qresource prefix="/components">
         <file alias="SimpleButton.qml">components/SimpleButton.qml</file>

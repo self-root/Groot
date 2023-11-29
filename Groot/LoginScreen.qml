@@ -2,12 +2,70 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls.Material 2.15
+import Qt5Compat.GraphicalEffects
 import "components"
 
 Page {
     Material.theme: Material.Dark
     Material.accent: "#4361ee"
+
+    Connections{
+        target: uicontroller
+        function onPwdMailRequestFail()
+        {
+            loginDialog.title = "Failed"
+            loginDialog.text = "User does not exist"
+            loginDialog.open()
+        }
+    }
+
     anchors.fill: parent
+
+    Popup{
+        id: mailDialog
+        anchors.centerIn: parent
+        //height: 200
+        //width: 300
+        //buttons: MessageDialog.Ok | MessageDialog.Cancel
+        width: 250
+        height: 120
+        focus: true
+        modal: true
+        background: Rectangle{
+            color: "transparent"
+        }
+
+        contentItem: Rectangle {
+            id: rct
+            anchors.fill: parent
+            color: "#4361ee"
+            radius: 20
+
+            TextField {
+                id: mailTxt
+                anchors.top: parent.top
+                anchors.topMargin: 6
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width - 12
+                color: "white"
+                placeholderText: "Enter email"
+                Material.accent: "#ffffff"
+                Material.primary: "#ffffff"
+            }
+            Button{
+                id: okButton
+                text: "Ok"
+                anchors.top: mailTxt.bottom
+                anchors.topMargin: 6
+                anchors.horizontalCenter: parent.horizontalCenter
+                Material.accent: "#ffffff"
+                onClicked: {
+                    vpnmanager.requestPwdResetMail(mailTxt.text)
+                    mailDialog.close()
+                }
+            }
+        }
+    }
 
     Connections{
         target: vpnmanager
@@ -190,14 +248,45 @@ Page {
                 Rectangle{
                     anchors.top: loginBtn.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
-                    width: lbl.width + lbl2.width
+                    width: parent.width
                     anchors.topMargin: 10
-                    Label{
+                    Text{
+                        id: goSignup
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: "<p><font color='#ffffff'>Don't have an account?</font><font color='#4361ee'> <a href='#'> Sign up</a></font></p>"
+                        onLinkActivated: {
+                            console.log("User wants to sign up")
+                            toSingUpAnimation.running = true
+                            welcomLbl.font.pixelSize = 20
+                        }
+
+                    }
+                    Text{
+                        id: goReset
+                        anchors.top: goSignup.bottom
+                        anchors.topMargin: 4
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: "<p><font color='#ffffff'>Forgot password?</font><font color='#4361ee'> <a href='#'> Reset password</a></font></p>"
+                        onLinkActivated: {
+                            console.log("reset")
+                            mailDialog.open()
+                        }
+
+                        /*MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                console.log("User wants to sign up")
+                                toSingUpAnimation.running = true
+                                welcomLbl.font.pixelSize = 20
+                            }
+                        }*/
+                    }
+                    /*Label{
                         id: lbl
                         text: "Don't have an account?"
-                    }
+                    }*
 
-                    Text{
+                    /*Text{
                         id: lbl2
                         anchors.left: lbl.right
                         anchors.leftMargin: 6
@@ -213,6 +302,31 @@ Page {
                             }
                         }
                     }
+
+                    Label{
+                        id: llb
+                        anchors.top: lbl.bottom
+                        anchors.topMargin: 5
+                        text: "Forgot password?"
+                    }
+
+                    Text{
+                        id: llbl2
+                        anchors.left: llb.right
+                        anchors.leftMargin: 6
+                        anchors.top: lbl2.bottom
+                        anchors.topMargin: 5
+                        font.underline: true
+                        text: "Reset password"
+                        color: "#4361ee"
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                mailDialog.open()
+                            }
+                        }
+
+                    }*/
                 }
             }
 
@@ -230,7 +344,7 @@ Page {
                 LineEdit{
                     id: singUpMail
                     width: parent.width * 0.7
-                    anchors.top: signUpUname.bottom
+                    anchors.top: parent.top
                     anchors.topMargin: 10
                     anchors.horizontalCenter: parent.horizontalCenter
                     placeholder: "Email"
@@ -295,4 +409,5 @@ Page {
             }
         }
     }
+
 }

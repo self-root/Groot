@@ -22,6 +22,10 @@ ApplicationWindow {
         function onToVerificationView(){
             mainStackView.push("qrc:/VerificationScreen.qml")
         }
+
+        function onToPwdReset(){
+            mainStackView.push("qrc:/ResetPasswordScreen.qml")
+        }
     }
 
     StackView{

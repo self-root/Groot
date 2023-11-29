@@ -112,6 +112,7 @@ void APICaller::resetPassword(const QJsonObject &obj)
         host,
         port,
         "/vpn/user/resetpassword"));
+    request.setRawHeader("content-type", "application/json");
     QNetworkReply *reply = networkmanager.post(request, QJsonDocument(obj).toJson(QJsonDocument::Compact));
     QObject::connect(reply, &QNetworkReply::finished, this, &APICaller::passwordResetReply);
 }
