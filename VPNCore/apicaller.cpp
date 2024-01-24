@@ -93,6 +93,30 @@ void APICaller::removeDevice(const User &user, const QString &deviceId)
     QObject::connect(reply, &QNetworkReply::finished, this, &APICaller::removeDeviceReply);
 }
 
+void APICaller::requestResetPwdMail(const QString &email)
+{
+    QNetworkRequest request;
+    request.setUrl(QString("https://%1:%2/%3/%4").arg(
+        host,
+        port,
+        "/vpn/user/resetpwdrequest",
+        email));
+    QNetworkReply *reply = networkmanager.get(request);
+    QObject::connect(reply, &QNetworkReply::finished, this, &APICaller::onRequestResetEmail);
+}
+
+void APICaller::resetPassword(const QJsonObject &obj)
+{
+    QNetworkRequest request;
+    request.setUrl(QString("https://%1:%2/%3").arg(
+        host,
+        port,
+        "/vpn/user/resetpassword"));
+    request.setRawHeader("content-type", "application/json");
+    QNetworkReply *reply = networkmanager.post(request, QJsonDocument(obj).toJson(QJsonDocument::Compact));
+    QObject::connect(reply, &QNetworkReply::finished, this, &APICaller::passwordResetReply);
+}
+
 void APICaller::basicloginReply()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
@@ -117,17 +141,18 @@ void APICaller::basicloginReply()
         }
 
         else if (statsCode == 401) {
-            emit invalidCredentials();
+            emit loginFailure("email or password are incorrect");
         }
 
         else if (statsCode == 403) {
+            emit loginFailure("email address not verified, check your mailbox");
             emit unverifiedUser();
         }
 
         else
         {
             qDebug() << __FUNCTION__ << " Unknown error: " << statsCode;
-            emit serverError();
+            emit loginFailure("An error has occured while trying to login, contact admin \nError code: " + QString::number(statsCode));
         }
     }
 }
@@ -163,7 +188,7 @@ void APICaller::loginReply()
         else
         {
             qDebug() << __FUNCTION__ << " Unknown error: " << statsCode;
-            emit serverError();
+            emit serverError("Unknown Error while loging using user token", statsCode);
         }
     }
 }
@@ -192,6 +217,7 @@ void APICaller::signupReply()
             break;
         default:
             qDebug() << __FUNCTION__ << "ERROR: " << statusCode;
+            emit serverError("Unknown error while trying to sign you up", statusCode);
             break;
         }
     }
@@ -285,7 +311,6 @@ void APICaller::getDevicesReply()
             break;
         }
     }
-
 }
 
 void APICaller::removeDeviceReply()
@@ -320,6 +345,50 @@ void APICaller::removeDeviceReply()
             break;
         default:
             qDebug() << __FUNCTION__ << "ERROR: " << statusCode;
+            break;
+        }
+    }
+}
+
+void APICaller::onRequestResetEmail()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    auto attr = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+
+    if (attr.isValid())
+    {
+        int statusCode = attr.toInt();
+        switch (statusCode) {
+        case 200:
+            emit resetPasswordMailSent();
+            break;
+        case 404:
+            emit requestPasswordMailFail();
+            break;
+        default:
+            qDebug() << __FUNCTION__ << " Error: " << statusCode;
+            break;
+        }
+    }
+}
+
+void APICaller::passwordResetReply()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    auto attr = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+
+    if (attr.isValid())
+    {
+        int statusCode = attr.toInt();
+        switch (statusCode) {
+        case 200:
+            emit passwordReset();
+            break;
+        case 404:
+            emit passwordResetFail();
+            break;
+        default:
+            qDebug() << __FUNCTION__ << " Error: " << statusCode;
             break;
         }
     }

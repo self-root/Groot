@@ -13,6 +13,7 @@
 #include "packagelistmodel.h"
 #include "vpnconfig.h"
 #include "devicelistmodel.h"
+#include "dnslistmodel.h"
 
 namespace AnVPN {
 class VPNCORE_EXPORT VPNManager : public QObject
@@ -23,6 +24,7 @@ class VPNCORE_EXPORT VPNManager : public QObject
     Q_PROPERTY(Traffic *traffic READ getTraffic CONSTANT)
     Q_PROPERTY(PackageListModel *packageListModel READ packageListModel CONSTANT)
     Q_PROPERTY(DeviceListModel *devicelistModel READ devicelistModel CONSTANT)
+    Q_PROPERTY(DNSListModel *dnsListModel READ dnsListModel CONSTANT)
 public:
     explicit VPNManager(QObject *parent = nullptr);
     Q_INVOKABLE void login(const QString &mail, const QString &password);
@@ -32,12 +34,16 @@ public:
     Q_INVOKABLE void getUserDevices();
     Q_INVOKABLE void removeDevice(const QString &deviceId);
     Q_INVOKABLE void logout();
+    Q_INVOKABLE void changeDns(const QString &dnsName);
+    Q_INVOKABLE void requestPwdResetMail(const QString &email);
+    Q_INVOKABLE void resetPassword(const QString &newPassword, const QString &verifcode);
     void getToken();
     void saveToken();
     User *getUser();
     Traffic *getTraffic();
     PackageListModel *packageListModel();
     DeviceListModel *devicelistModel();
+    DNSListModel *dnsListModel();
 
     int tunnelState() const;
     void setTunnelState(int newTunnelState);
@@ -45,7 +51,7 @@ public slots:
     void onDeviceRemoved(const QString &deviceId);
 signals:
     void loginSuccess();
-    void loginFailure();
+    void loginFailure(const QString &message);
     void verifyUser();
     void userLoggedOut();
     void vpnConnected();
@@ -54,6 +60,12 @@ signals:
     void needToLogin();
     void signedUp();
     void tunnelStateChanged();
+    void userConflict();
+    void verificationCodeNotMatch();
+    void pwdResetMailSent();
+    void pwdResetMailFail();
+    void passwordReset();
+    void passwordResetFail();
 
 private:
     APICaller apiCaller;
@@ -66,6 +78,7 @@ private:
     PackageListModel *packageModel;
     DeviceListModel *mDeviceListModel;
     VPNConfig config;
+    DNSListModel *mDnsListModel;
 private slots:
     void onBasicLoginSuccessfull(const QJsonObject &data);
     void onLoginSuccess(const QJsonObject &data);

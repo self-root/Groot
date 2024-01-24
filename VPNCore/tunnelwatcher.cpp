@@ -12,10 +12,6 @@ TunnelWatcher::TunnelWatcher(QJniObject &wg, QObject *parent)
 void TunnelWatcher::readState()
 {
     int res = mWg.callMethod<jint>("getTunSTate");
-    /*int res = QJniObject::callStaticMethod<jint>(
-        "xyz/irootsoftware/wireguard/WireguardConnection",
-        "getTunnelSTate",
-        "()I");*/
 
     if (res != state)
     {

@@ -23,13 +23,11 @@ public:
     void getConf(const QJsonObject &obj, const User &user);
     void getDevices(const User &user);
     void removeDevice(const User &user, const QString &deviceId);
+    void requestResetPwdMail(const QString &email);
+    void resetPassword(const QJsonObject &obj);
 
 private:
-#ifdef QT_DEBUG
-    QString host = "94.176.237.78";
-#else
     QString host = "irootsoftware.xyz";
-#endif
     QString port = "443";
     QNetworkAccessManager networkmanager;
 
@@ -41,6 +39,8 @@ private slots:
     void userConfReply();
     void getDevicesReply();
     void removeDeviceReply();
+    void onRequestResetEmail();
+    void passwordResetReply();
 
 signals:
     void loginSuccessfull(const QJsonObject &data);
@@ -48,8 +48,9 @@ signals:
     void badRequest();
     void unverifiedUser();
     void invalidToken();
+    void loginFailure(const QString &message);
     void invalidCredentials();
-    void serverError();
+    void serverError(const QString &error, int errorCode);
     void signupSuccess();
     void userConflict();
     void emailVerified();
@@ -60,6 +61,10 @@ signals:
     void deviceListReady(const QJsonArray &devices);
     void deviceRemoved(const QString &deviceId);
     void noDevice(const QString &deviceId);
+    void resetPasswordMailSent();
+    void requestPasswordMailFail();
+    void passwordReset();
+    void passwordResetFail();
 };
 
 }

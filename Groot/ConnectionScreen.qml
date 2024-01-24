@@ -76,7 +76,7 @@ Item {
         id: appName
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: settingIcon.verticalCenter
-        text: "Groot"
+        text: "StealthLink"
         color: "white"
         font.pixelSize: 18
         font.bold: true

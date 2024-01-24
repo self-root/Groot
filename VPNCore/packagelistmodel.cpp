@@ -5,6 +5,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QSettings>
+#include <algorithm>
 
 namespace AnVPN {
 PackageListModel::PackageListModel(QObject *parent)
@@ -15,6 +16,7 @@ PackageListModel::PackageListModel(QObject *parent)
 
 int PackageListModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return mPackages.size();
 }
 
@@ -73,13 +75,24 @@ void PackageListModel::getAppLists()
         pkg.name = ex["appName"].toString();
         pkg.package = ex["packageName"].toString();
 
-        if (excluded.contains(pkg.package))
-            pkg.excluded = true;
-        else
-            pkg.excluded = false;
+        //qDebug() << pkg.name << " == " << pkg.package;
+        //if (pkg.name == pkg.package)
 
-        mPackages.push_back(pkg);
+        if (excluded.contains(pkg.package))
+        {
+            pkg.excluded = true;
+            mPackages.insert(mPackages.begin(), pkg);
+        }
+        else
+        {
+            pkg.excluded = false;
+            mPackages.push_back(pkg);
+        }
     }
+    std::sort(mPackages.begin() + excluded.size(), mPackages.end(),
+              [](const Package &a, const Package &b){
+                  return a.name < b.name;
+              });
     endResetModel();
 
 }
@@ -125,7 +138,6 @@ void PackageListModel::getExcluded()
     {
         settings.setArrayIndex(i);
         excluded.append(settings.value("package").toString());
-        qDebug() << "Excluded: " << settings.value("package").toString();
     }
     settings.endArray();
 

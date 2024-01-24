@@ -23,9 +23,12 @@ public:
 
     static QStringList getExcludedApp();
 
+    void setDNS(const QPair<QString, QString> &dns);
+
 private:
     QJsonObject config;
     QStringList excludedApp;
+    QPair<QString, QString> mDns;
 signals:
 
 };

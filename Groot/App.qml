@@ -38,6 +38,10 @@ Page {
             viewStack.push("qrc:/About.qml")
         }
 
+        function onToDNSSetting(){
+            viewStack.push("qrc:/DNSSettingScreen.qml")
+        }
+
     }
 
     StackView{

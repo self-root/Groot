@@ -50,7 +50,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         width: 200
         fillMode: Image.PreserveAspectFit
-        source: "qrc:/assets/groot.png"
+        source: "qrc:/assets/StealthLink.svg"
     }
 
     Text {
@@ -67,10 +67,13 @@ Item {
         id: aboutTxt
         anchors.top: appName.bottom
         anchors.topMargin: 10
+        width: parent.width
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "A secure VPN client app"
+        text: "Unlock the Invisible Shield: securing your connectivity."
         color: "white"
         font.pixelSize: 14
+        wrapMode: Text.WordWrap
+        horizontalAlignment:  Text.AlignHCenter
     }
 
     Text {
@@ -78,7 +81,7 @@ Item {
         anchors.top: aboutTxt.bottom
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Created by VAOHITA Ivan Oscar"
+        text: "Created by Oscar, AKA Root"
         color: "white"
         font.pixelSize: 14
     }

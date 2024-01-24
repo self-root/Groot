@@ -14,6 +14,7 @@ SOURCES += \
     apicaller.cpp \
     devicelistmodel.cpp \
     devicemanager.cpp \
+    dnslistmodel.cpp \
     packagelistmodel.cpp \
     secretservice.cpp \
     traffic.cpp \
@@ -24,11 +25,11 @@ SOURCES += \
     vpnmanager.cpp
 
 HEADERS += \
-    Utils.h \
     VPNCore_global.h \
     apicaller.h \
     devicelistmodel.h \
     devicemanager.h \
+    dnslistmodel.h \
     packagelistmodel.h \
     secretservice.h \
     traffic.h \
