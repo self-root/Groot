@@ -20,5 +20,5 @@ UIController::UIController(AnVPN::VPNManager &vpnManager_, QObject *parent)
 
 QString UIController::appName()
 {
-    return "StealthLink v1.0.0";
+    return "StealthLink v1.1.1";
 }

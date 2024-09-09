@@ -27,7 +27,7 @@ public:
     void resetPassword(const QJsonObject &obj);
 
 private:
-    QString host = "irootsoftware.xyz";
+    QString host = "api.irootsoftware.com";
     QString port = "443";
     QNetworkAccessManager networkmanager;
 

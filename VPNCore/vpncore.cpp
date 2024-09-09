@@ -10,9 +10,10 @@ namespace AnVPN {
 VPNCore::VPNCore(QObject *parent)
     : QObject(parent)
 {
+    QtJniTypes::Context context = QNativeInterface::QAndroidApplication::context();
     wgConnection = QJniObject("xyz/irootsoftware/wireguard/WireguardConnection",
                               "(Landroid/content/Context;)V",
-                              QNativeInterface::QAndroidApplication::context());
+                              context.object<jobject>());
 
     tunnelWatcher = new TunnelWatcher(wgConnection);
     QObject::connect(tunnelWatcher, &TunnelWatcher::connected, this, &VPNCore::tunnelConnected);
